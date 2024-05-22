@@ -6,13 +6,16 @@ def f(X: Vector) -> float:
     x1, x2 = X
     return x1 ** 2 + x1 * x2 + x2 ** 2 - 6 * x1 - 9 * x2
 
-def nelder_mead_method(f, simplex: list[Vector], n: int = 0):
+def nelder_mead_method(f, simplex: list[Vector], n: int = 100, eps: float = 1e-5):
     k = 0
     
-    while k < n:
+    while k < n and not closure(simplex, eps):
         k += 1
+
         simplex.sort(key=lambda x: f(x))
         xh, xg, xl = simplex[-1], simplex[-2], simplex[0]
+
+        yield (xl, xg, xh)
 
         xc = weight_center(*[x for x in simplex if x != xh])
 
@@ -47,14 +50,13 @@ def nelder_mead_method(f, simplex: list[Vector], n: int = 0):
         elif f(xs) > f(xh):
             simplex = homothety(simplex, xl)
 
-    return xl
-
 if __name__ == '__main__':
-    n = 10
+    n = 100
     simplex = [
         Vector(0, 0),
         Vector(1, 0),
-        Vector(0, 1),
+        Vector(2, 1),
     ]
-    x = nelder_mead_method(f, simplex, 10)
-    print(x, f(x))
+    eps = 1e-6
+    for x, *_ in nelder_mead_method(f, simplex, n, eps): ...
+    print(f'{x=}, {f(x)=}')
