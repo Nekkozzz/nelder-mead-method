@@ -92,5 +92,15 @@ class TestOperator(unittest.TestCase):
         result = homothety(simplex, xl)
         self.assertEqual(result, [Vector(3, 5.5), Vector(2, 3.5), Vector(5, 7.5)])
 
+    def test_closure(self):
+        simplex = [Vector(1, 2), Vector(-1, -2), Vector(5, 6)]
+        eps = 5.3
+        self.assertTrue(closure(simplex, eps))
+
+    def test_not_closure(self):
+        simplex = [Vector(1, 2), Vector(-1, -2), Vector(5, 6)]
+        eps = 1.0
+        self.assertFalse(closure(simplex, eps))
+
 if __name__ == '__main__':
     unittest.main()
