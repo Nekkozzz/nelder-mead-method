@@ -1,5 +1,6 @@
 from functools import reduce
 from vector import Vector
+import math as m
 
 
 def weight_center(*points: list[Vector]) -> Vector:
@@ -20,3 +21,10 @@ def expansion(xr: Vector, xc: Vector, gamma: float = 2) -> Vector:
 
 def homothety(simplex: list[Vector], xl: Vector) -> list[Vector]:
     return [xl + (x - xl) / 2 for x in simplex]
+
+def closure(simplex: list[Vector], eps: float):
+    xc = weight_center(*simplex)
+    for x in simplex:
+        if m.dist(x, xc) > eps:
+            return False
+    return True
