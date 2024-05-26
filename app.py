@@ -117,10 +117,12 @@ class Canvas(ctk.CTkCanvas):
         self.points.update(points)
         self.history.append(list(points))
 
-        self.lb = self.corner(min)
-        self.rt = self.corner(max)
-
-        self.redraw()
+        lb, rt = self.corner(min), self.corner(max)
+        if self.lb != lb or self.rt != rt:
+            self.lb, self.rt = lb, rt
+            self.redraw('reset')
+        else:
+            self.redraw()
 
     def draw_tri(self, points: list[Vector], color):
         points = list(map(self.scale_point, points))
@@ -141,13 +143,16 @@ class Canvas(ctk.CTkCanvas):
         )
     
     def redraw(self, event=None):
-        self.draw_width = self.winfo_width() - self.x_left - self.x_right
-        self.draw_height = self.winfo_height() - self.y_top - self.y_bottom
-        self.delete('all')
-        self.redraw_axes()
         if len(self.history) == 0: return
-        for step in self.history[:-1]:
-            self.draw_tri(step, 'grey')
+        if event == 'reset':
+            self.draw_width = self.winfo_width() - self.x_left - self.x_right
+            self.draw_height = self.winfo_height() - self.y_top - self.y_bottom
+            self.delete('all')
+            self.redraw_axes()
+            for step in self.history[:-1]:
+                self.draw_tri(step, 'grey')
+        elif len(self.history) > 1:
+            self.draw_tri(self.history[-2], 'grey')
         self.draw_tri(self.history[-1], 'red')
 
     def redraw_axes(self):
