@@ -6,7 +6,7 @@ def f(X: Vector) -> float:
     x1, x2 = X
     return x1 ** 2 + x1 * x2 + x2 ** 2 - 6 * x1 - 9 * x2
 
-def nelder_mead_method(f, simplex: list[Vector], n: int = 100, eps: float = 1e-5):
+def nelder_mead_method(f, simplex: list[Vector], n: int = 200, eps: float = 1e-6):
     k = 0
     
     while k < n and not closure(simplex, eps):

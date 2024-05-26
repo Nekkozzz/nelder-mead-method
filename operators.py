@@ -23,6 +23,8 @@ def homothety(simplex: list[Vector], xl: Vector) -> list[Vector]:
     return [xl + (x - xl) / 2 for x in simplex]
 
 def closure(simplex: list[Vector], eps: float):
+    if all(v == simplex[0] for v in simplex):
+        return True
     xc = weight_center(*simplex)
     for x in simplex:
         if m.dist(x, xc) > eps:

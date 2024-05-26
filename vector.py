@@ -1,9 +1,12 @@
+from random import randint
+
+
 class Vector(tuple):
     def __new__(cls, *body):
         if not body:
-            raise ValueError('')
+            raise ValueError('Vector must have a body')
         elif len(body) == 1:
-            raise ValueError('')
+            raise ValueError('Vector can not contains one element')
         return tuple.__new__(cls, body)
     
     def __add__(self, other):
@@ -40,3 +43,7 @@ class Vector(tuple):
         if value == 0:
             raise ZeroDivisionError('Division by zero')
         return Vector(*tuple(x / value for x in self))
+    
+    @staticmethod
+    def random(a: int, b: int, n: int = 2):
+        return Vector(*[randint(a, b) for _ in range(n)])
